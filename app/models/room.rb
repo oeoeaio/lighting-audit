@@ -1,5 +1,6 @@
 class Room < ActiveRecord::Base
   belongs_to :house
+  has_many :switches
 
   validates :house, :room_type, :number, :area, :height, presence: true
   validates :indoors, inclusion: { in: [true, false], message: "must be true or false" }

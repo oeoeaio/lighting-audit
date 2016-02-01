@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201100551) do
+ActiveRecord::Schema.define(version: 20160201111911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,5 +40,19 @@ ActiveRecord::Schema.define(version: 20160201100551) do
 
   add_index "rooms", ["house_id"], name: "index_rooms_on_house_id", using: :btree
 
+  create_table "switches", force: :cascade do |t|
+    t.integer  "house_id",   null: false
+    t.integer  "room_id",    null: false
+    t.string   "number",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "switches", ["house_id"], name: "index_switches_on_house_id", using: :btree
+  add_index "switches", ["number"], name: "index_switches_on_number", using: :btree
+  add_index "switches", ["room_id"], name: "index_switches_on_room_id", using: :btree
+
   add_foreign_key "rooms", "houses"
+  add_foreign_key "switches", "houses"
+  add_foreign_key "switches", "rooms"
 end
