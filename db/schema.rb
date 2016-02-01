@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201054436) do
+ActiveRecord::Schema.define(version: 20160201100551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,4 +24,21 @@ ActiveRecord::Schema.define(version: 20160201054436) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "rooms", force: :cascade do |t|
+    t.integer  "house_id",                                                      null: false
+    t.integer  "number",                                                        null: false
+    t.string   "room_type",                                                     null: false
+    t.boolean  "indoors",                                                       null: false
+    t.decimal  "area",                  precision: 5, scale: 2,                 null: false
+    t.decimal  "height",                precision: 5, scale: 2,                 null: false
+    t.boolean  "lighting_rennovation",                          default: false
+    t.boolean  "lighting_major_change",                         default: false
+    t.text     "notes"
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
+  end
+
+  add_index "rooms", ["house_id"], name: "index_rooms_on_house_id", using: :btree
+
+  add_foreign_key "rooms", "houses"
 end
