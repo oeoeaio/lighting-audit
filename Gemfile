@@ -32,6 +32,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'haml'
+gem 'foundation-rails'
 gem 'roo', '~> 2.1.0'
 
 group :development, :test do
