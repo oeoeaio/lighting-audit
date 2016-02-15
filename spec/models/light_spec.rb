@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Light, type: :model do
-  let(:house) { House.create(name: "House3", house_type: "Detached house", storey_count: 4) }
+  let(:house) { House.create(name: "House3", auditor: "OD", house_type: "Detached house", storey_count: 4) }
   let(:room) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
   let(:switch) { Switch.create(house: house, room: room, number: "3") }
   let(:light) { Light.create(house: house, room: room, switch: switch, name: "L1", connection_type: "F", fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10", transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5") }

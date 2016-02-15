@@ -2,14 +2,20 @@ require 'rails_helper'
 
 RSpec.describe House, type: :model do
   describe "validation" do
-    let(:house1) { House.create(name: "House1", house_type: "Some disallowed value", storey_count: 0) }
-    let(:house2) { House.create(name: "", house_type: "", storey_count: nil) }
-    let(:house3) { House.create(name: "House3", house_type: "Detached house", storey_count: 4) }
+    let(:house1) { House.create(name: "House1", auditor: "DY", house_type: "Some disallowed value", storey_count: 0) }
+    let(:house2) { House.create(name: "", auditor: "", house_type: "", storey_count: nil) }
+    let(:house3) { House.create(name: "House3", auditor: "NR", house_type: "Detached house", storey_count: 4) }
 
     it "requires that a name is present" do
       expect(house1.errors[:name]).to eq []
       expect(house2.errors[:name]).to eq ["can't be blank"]
       expect(house3.errors[:name]).to eq []
+    end
+
+    it "requires that an auditor is present" do
+      expect(house1.errors[:auditor]).to eq []
+      expect(house2.errors[:auditor]).to eq ["can't be blank"]
+      expect(house3.errors[:auditor]).to eq []
     end
 
     it "only allows specific house types" do

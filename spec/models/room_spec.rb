@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Room, type: :model do
   describe "validation" do
-    let(:house) { House.create(name: "House3", house_type: "Detached house", storey_count: 4) }
+    let(:house) { House.create(name: "House3", auditor: "OD", house_type: "Detached house", storey_count: 4) }
     let(:room1) { Room.create(house: house, number: "r12", indoors: false, room_type: "Bedroom", area: "12.b", height: "m") }
     let(:room2) { Room.create(house: nil, number: "", indoors: nil, room_type: "", area: "", height: "") }
     let(:room3) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
