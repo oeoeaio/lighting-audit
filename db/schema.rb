@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201111911) do
+ActiveRecord::Schema.define(version: 20160201120950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,32 @@ ActiveRecord::Schema.define(version: 20160201111911) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
+
+  create_table "lights", force: :cascade do |t|
+    t.integer  "house_id",                                                  null: false
+    t.integer  "room_id",                                                   null: false
+    t.integer  "switch_id",                                                 null: false
+    t.string   "name",                                                      null: false
+    t.string   "connection_type",                                           null: false
+    t.boolean  "dimmer",                                  default: false,   null: false
+    t.boolean  "motion",                                  default: false,   null: false
+    t.string   "fitting",                                                   null: false
+    t.string   "colour",                                                    null: false
+    t.string   "technology",                                                null: false
+    t.string   "shape",                                                     null: false
+    t.string   "cap"
+    t.string   "transformer"
+    t.decimal  "wattage",         precision: 5, scale: 2,                   null: false
+    t.string   "wattage_source",                          default: "label", null: false
+    t.decimal  "usage",           precision: 4, scale: 1,                   null: false
+    t.text     "notes"
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+  end
+
+  add_index "lights", ["house_id"], name: "index_lights_on_house_id", using: :btree
+  add_index "lights", ["room_id"], name: "index_lights_on_room_id", using: :btree
+  add_index "lights", ["switch_id"], name: "index_lights_on_switch_id", using: :btree
 
   create_table "rooms", force: :cascade do |t|
     t.integer  "house_id",                                                      null: false
@@ -52,6 +78,9 @@ ActiveRecord::Schema.define(version: 20160201111911) do
   add_index "switches", ["number"], name: "index_switches_on_number", using: :btree
   add_index "switches", ["room_id"], name: "index_switches_on_room_id", using: :btree
 
+  add_foreign_key "lights", "houses"
+  add_foreign_key "lights", "rooms"
+  add_foreign_key "lights", "switches"
   add_foreign_key "rooms", "houses"
   add_foreign_key "switches", "houses"
   add_foreign_key "switches", "rooms"
