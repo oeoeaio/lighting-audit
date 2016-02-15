@@ -1,7 +1,7 @@
 class Room < ActiveRecord::Base
   belongs_to :house
-  has_many :switches
-  has_many :lights
+  has_many :switches, dependent: :destroy
+  has_many :lights, dependent: :destroy
 
   validates :house, :room_type, :number, :area, :height, presence: true
   validates :indoors, inclusion: { in: [true, false], message: "must be true or false" }

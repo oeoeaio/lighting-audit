@@ -30,4 +30,23 @@ RSpec.describe House, type: :model do
       expect(house3.errors[:storey_count]).to eq []
     end
   end
+
+  describe "desctruction" do
+    let(:house) { House.create(name: "House3", auditor: "RO", house_type: "Detached house", storey_count: 4) }
+    let(:room) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
+    let(:switch) { Switch.create(house: house, room: room, number: "3") }
+    let(:light) { Light.create(house: house, room: room, switch: switch, name: "L1", connection_type: "F", fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10", transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5") }
+
+    it "destroys all dependent switches, rooms and lights" do
+      expect(house).to be
+      expect(room).to be
+      expect(switch).to be
+      expect(light).to be
+      house.destroy
+      expect(House.find_by_id(house.id)).to be_nil
+      expect(Room.find_by_id(room.id)).to be_nil
+      expect(Switch.find_by_id(switch.id)).to be_nil
+      expect(Light.find_by_id(light.id)).to be_nil
+    end
+  end
 end

@@ -1,7 +1,7 @@
 class House < ActiveRecord::Base
-  has_many :rooms
-  has_many :switches
-  has_many :lights
+  has_many :rooms, dependent: :destroy
+  has_many :switches, dependent: :destroy
+  has_many :lights, dependent: :destroy
 
   validates :name, presence: true
   validates :auditor, presence: true
