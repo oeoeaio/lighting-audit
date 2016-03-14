@@ -46,13 +46,13 @@ class Light < ActiveRecord::Base
     when "Halogen - mains voltage"
       return {
         shape: ["A-shape frosted", "A-shape clear", "Fancy Round frosted", "Fancy Round clear", "Globe (sphere) frosted", "Globe (sphere) clear", "Candle frosted", "Candle clear", "Pilot", "Capsule", "Reflector - R", "Reflector - PAR", "Reflector - MR 50mm", "Double ended (lin halogen)", "Other", "Cannot identify"],
-        cap: ["E14", "E27", "B15", "B22", "GU10", "R7", "Other", "Cannot identify"],
+        cap: ["E14", "E27", "B15", "B22", "GU10 (240V)", "R7", "Other", "Cannot identify"],
         transformer: ["N/A"]
       }
     when "Halogen - low voltage"
       return {
         shape: ["Capsule", "Reflector - MR 30mm", "Reflector - MR 50mm", "Double ended (lin halogen)", "Other", "Cannot identify"],
-        cap: ["G4-5.3", "Cannot identify"],
+        cap: ["G4-5.3 (12V)", "Cannot identify"],
         transformer: ["Magnetic", "Electronic", "Cannot identify"]
       }
     when "CFL - integral ballast"

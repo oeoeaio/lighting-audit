@@ -1,0 +1,24 @@
+- if @file_issues.present?
+  .row
+    .small-12.columns
+      The following files were ignored, because they were already in the database:
+      = @file_issues.join(", ")
+- if @issues.present?
+  .row
+    .small-12.columns
+      The following fatal errors occurred:
+  - @issues.each do |file_name, issues|
+    .row
+      .small-12.columns
+        %strong= "#{file_name}:"
+    - [:house, :rooms, :switches, :lights].each do |type|
+      - if issues[type]
+        - issues[type].each do |message|
+          .row
+            .small-12.columns= message
+
+.row
+  .small-12.columns
+    = form_for :houses, url: create_multiple_houses_path do |f|
+      = f.file_field :audit_files, multiple: true
+      = f.submit 'Upload Audit Files'
