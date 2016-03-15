@@ -35,6 +35,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml'
 gem 'foundation-rails'
 gem 'roo', '~> 2.1.0'
+gem 'devise'
+gem 'pundit'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
