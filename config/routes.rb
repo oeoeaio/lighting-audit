@@ -1,14 +1,17 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  # You can have the root of your site routed with "root"
-  root 'houses#new_multiple'
+  get 'houses/new_multiple', to: 'houses#new_multiple', as: :user_root
 
   resources :houses, only: [] do
     collection do
       get :new_multiple
       post :create_multiple
     end
+  end
+
+  devise_scope :user do
+    root to: "devise/sessions#new"
   end
 
   # Example of regular route:

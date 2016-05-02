@@ -1,9 +1,11 @@
 require 'audit_sheet_importer'
 class HousesController < ApplicationController
   def new_multiple
+    authorize House
   end
 
   def create_multiple
+    authorize House
     files = params[:houses][:audit_files]
     files.keep_if{ |f| f.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
     importer = AuditSheetImporter.new files: files
