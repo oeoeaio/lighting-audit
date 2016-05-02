@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Light, type: :model do
-  let(:house) { House.create(name: "House3", auditor: "OD", house_type: "Detached house", storey_count: 4) }
-  let(:room) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
-  let(:switch) { Switch.create(house: house, room: room, number: "3") }
-  let(:light) { Light.create(house: house,room: room, switch: switch, name: "L1", connection_type: "F",
-    fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10",
-    transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5", tech_mod: "LED directional",
-    mains_reflector: 0.7, row: 8, power_multiplier: 1.163, power_add: 0, log_multiplier: 10.361,
-    log_add: 29.131, power_adj: 7, efficacy: 59.1, lumens: 853.3, lumens_round: 853) }
+  let(:house) { create(:house) }
+  let(:room) { create(:room, house: house) }
+  let(:switch) { create(:switch, house: house, room: room) }
+  let(:light) { create(:light, house: house, room: room, switch: switch) }
+
+  before { light.valid? }
 
   describe "associations" do
     it "creates associations" do

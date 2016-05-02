@@ -2,10 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Room, type: :model do
   describe "validation" do
-    let(:house) { House.create(name: "House3", auditor: "OD", house_type: "Detached house", storey_count: 4) }
-    let(:room1) { Room.create(house: house, number: "r12", indoors: false, room_type: "Bedroom", area: "12.b", height: "m") }
-    let(:room2) { Room.create(house: nil, number: "", indoors: nil, room_type: "", area: "", height: "") }
-    let(:room3) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
+    let(:house) { create(:house) }
+    let(:room1) { build(:room, house: house, number: "r12", indoors: false, room_type: "Bedroom", area: "12.b", height: "m") }
+    let(:room2) { build(:room, house: nil, number: "", indoors: nil, room_type: "", area: "", height: "") }
+    let(:room3) { build(:room, house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
+
+    before do
+      expect(room1.valid?).to be false
+      expect(room2.valid?).to be false
+      expect(room3.valid?).to be true
+    end
 
     it "requires that a house is present" do
       expect(room1.errors[:house]).to eq []

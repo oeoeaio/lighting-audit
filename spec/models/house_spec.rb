@@ -2,9 +2,15 @@ require 'rails_helper'
 
 RSpec.describe House, type: :model do
   describe "validation" do
-    let(:house1) { House.create(name: "House1", auditor: "DY", house_type: "Some disallowed value", storey_count: 0) }
-    let(:house2) { House.create(name: "", auditor: "", house_type: "", storey_count: nil) }
-    let(:house3) { House.create(name: "House3", auditor: "NR", house_type: "Detached house", storey_count: 4) }
+    let(:house1) { build(:house, name: "House1", auditor: "DY", house_type: "Some disallowed value", storey_count: 0) }
+    let(:house2) { build(:house, name: "", auditor: "", house_type: "", storey_count: nil) }
+    let(:house3) { build(:house, name: "House3", auditor: "NR", house_type: "Detached house", storey_count: 4) }
+
+    before do
+      expect(house1.valid?).to be false
+      expect(house2.valid?).to be false
+      expect(house3.valid?).to be true
+    end
 
     it "requires that a name is present" do
       expect(house1.errors[:name]).to eq []
@@ -32,10 +38,10 @@ RSpec.describe House, type: :model do
   end
 
   describe "desctruction" do
-    let(:house) { House.create(name: "House3", auditor: "RO", house_type: "Detached house", storey_count: 4) }
-    let(:room) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
-    let(:switch) { Switch.create(house: house, room: room, number: "3") }
-    let(:light) { Light.create(house: house, room: room, switch: switch, name: "L1", connection_type: "F", fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10", transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5") }
+    let(:house) { create(:house) }
+    let(:room) { create(:room, house: house) }
+    let(:switch) { create(:switch, house: house, room: room) }
+    let(:light) { create(:light, house: house, room: room, switch: switch) }
 
     it "destroys all dependent switches, rooms and lights" do
       expect(house).to be
