@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502004639) do
+ActiveRecord::Schema.define(version: 20160502041104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,17 +63,15 @@ ActiveRecord::Schema.define(version: 20160502004639) do
   add_index "lights", ["switch_id"], name: "index_lights_on_switch_id", using: :btree
 
   create_table "rooms", force: :cascade do |t|
-    t.integer  "house_id",                                                      null: false
-    t.integer  "number",                                                        null: false
-    t.string   "room_type",                                                     null: false
-    t.boolean  "indoors",                                                       null: false
-    t.decimal  "area",                  precision: 5, scale: 2
-    t.decimal  "height",                precision: 5, scale: 2
-    t.boolean  "lighting_rennovation",                          default: false
-    t.boolean  "lighting_major_change",                         default: false
+    t.integer  "house_id",                           null: false
+    t.integer  "number",                             null: false
+    t.string   "room_type",                          null: false
+    t.boolean  "indoors",                            null: false
+    t.decimal  "area",       precision: 5, scale: 2
+    t.decimal  "height",     precision: 5, scale: 2
     t.text     "notes"
-    t.datetime "created_at",                                                    null: false
-    t.datetime "updated_at",                                                    null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   add_index "rooms", ["house_id"], name: "index_rooms_on_house_id", using: :btree
