@@ -4,7 +4,11 @@ RSpec.describe Light, type: :model do
   let(:house) { House.create(name: "House3", auditor: "OD", house_type: "Detached house", storey_count: 4) }
   let(:room) { Room.create(house: house, number: "12", indoors: true, room_type: "Bedroom", area: "12.45", height: "2.34") }
   let(:switch) { Switch.create(house: house, room: room, number: "3") }
-  let(:light) { Light.create(house: house, room: room, switch: switch, name: "L1", connection_type: "F", fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10", transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5") }
+  let(:light) { Light.create(house: house,room: room, switch: switch, name: "L1", connection_type: "F",
+    fitting: "Batton Holder", colour: "C", technology: "LED directional", shape: "Reflector - R", cap: "GU10",
+    transformer: "N/A (240V)", wattage: "5", wattage_source: "Label", usage: "5", tech_mod: "LED directional",
+    mains_reflector: 0.7, row: 8, power_multiplier: 1.163, power_add: 0, log_multiplier: 10.361,
+    log_add: 29.131, power_adj: 7, efficacy: 59.1, lumens: 853.3, lumens_round: 853) }
 
   describe "associations" do
     it "creates associations" do
@@ -70,6 +74,22 @@ RSpec.describe Light, type: :model do
     it "requires a usage between 0 and 24" do
       expect(light_invalid1.errors[:usage]).to eq ["can't be blank", "is not a number"]
       expect(light_invalid2.errors[:usage]).to eq ["must be less than or equal to 24"]
+    end
+
+    it "requires a known tech-mod" do
+      expect(light_invalid1.errors[:tech_mod]).to eq ["can't be blank", "'' is not a valid tech-mod"]
+    end
+
+    it "require efficacy fields to be numbers" do
+      expect(light_invalid1.errors[:mains_reflector]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:power_multiplier]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:power_add]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:log_multiplier]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:log_add]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:power_adj]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:efficacy]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:lumens]).to eq ["can't be blank", "is not a number"]
+      expect(light_invalid1.errors[:lumens_round]).to eq ["can't be blank", "is not a number"]
     end
   end
 end

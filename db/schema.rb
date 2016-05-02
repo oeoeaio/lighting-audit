@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215032359) do
+ActiveRecord::Schema.define(version: 20160502004639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,25 +26,36 @@ ActiveRecord::Schema.define(version: 20160215032359) do
   end
 
   create_table "lights", force: :cascade do |t|
-    t.integer  "house_id",                                                  null: false
-    t.integer  "room_id",                                                   null: false
-    t.integer  "switch_id",                                                 null: false
-    t.string   "name",                                                      null: false
-    t.string   "connection_type",                                           null: false
-    t.boolean  "dimmer",                                  default: false,   null: false
-    t.boolean  "motion",                                  default: false,   null: false
-    t.string   "fitting",                                                   null: false
-    t.string   "colour",                                                    null: false
-    t.string   "technology",                                                null: false
-    t.string   "shape",                                                     null: false
+    t.integer  "house_id",                                                    null: false
+    t.integer  "room_id",                                                     null: false
+    t.integer  "switch_id",                                                   null: false
+    t.string   "name",                                                        null: false
+    t.string   "connection_type",                                             null: false
+    t.boolean  "dimmer",                                    default: false,   null: false
+    t.boolean  "motion",                                    default: false,   null: false
+    t.string   "fitting",                                                     null: false
+    t.string   "colour",                                                      null: false
+    t.string   "technology",                                                  null: false
+    t.string   "shape",                                                       null: false
     t.string   "cap"
     t.string   "transformer"
-    t.decimal  "wattage",         precision: 5, scale: 2,                   null: false
-    t.string   "wattage_source",                          default: "label", null: false
-    t.decimal  "usage",           precision: 4, scale: 1,                   null: false
+    t.decimal  "wattage",          precision: 5,  scale: 2,                   null: false
+    t.string   "wattage_source",                            default: "label", null: false
+    t.decimal  "usage",            precision: 4,  scale: 1,                   null: false
     t.text     "notes"
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "tech_mod",                                                    null: false
+    t.decimal  "mains_reflector",  precision: 2,  scale: 1,                   null: false
+    t.integer  "row",                                                         null: false
+    t.decimal  "power_multiplier", precision: 10, scale: 6,                   null: false
+    t.integer  "power_add",                                                   null: false
+    t.decimal  "log_multiplier",   precision: 10, scale: 6,                   null: false
+    t.decimal  "log_add",          precision: 10, scale: 6,                   null: false
+    t.decimal  "power_adj",        precision: 10, scale: 6,                   null: false
+    t.decimal  "efficacy",         precision: 10, scale: 6,                   null: false
+    t.decimal  "lumens",           precision: 10, scale: 6,                   null: false
+    t.integer  "lumens_round",                                                null: false
   end
 
   add_index "lights", ["house_id"], name: "index_lights_on_house_id", using: :btree

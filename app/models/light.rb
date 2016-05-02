@@ -4,6 +4,7 @@ class Light < ActiveRecord::Base
   belongs_to :switch
 
   validates :house, :room, :switch, :name, :connection_type, :fitting, :colour, :technology, :shape, :wattage, :wattage_source, :usage, presence: true
+  validates :tech_mod, :mains_reflector, :row, :power_multiplier, :power_add, :log_multiplier, :log_add, :power_adj, :efficacy, :lumens, :lumens_round, presence: true
   validates :connection_type, inclusion: { in: ["F", "P"], message: "'%{value}' is not a valid connection type (must be 'F' or 'P')" }
   validates :fitting, inclusion: { in: ["Batton Holder", "Batton Holder with Shade", "Bedside Lamp", "Chandelier", "Desk Lamp", "Downlight/Flush Mounted", "Fan light", "Fixed Floor Light", "Floodlight/External Spotlight", "Floor/Standard Lamp", "Garden Light", "Heat Lamp", "Indoor Spotlight", "Linear batton/strip", "Nightlight", "Other", "Oyster", "Pool Light", "Rangehood", "Skylight-with-lamp", "Pendant", "Table Lamp", "Under bench", "Uplight", "Wall Light"], message: "'%{value}' is not a valid fitting type" }
   validates :colour, inclusion: { in: ["C", "W"], message: "'%{value}' is not a valid lamp colour (must be 'C' or 'W')" }
@@ -14,6 +15,17 @@ class Light < ActiveRecord::Base
   validates :wattage, numericality: { greater_than: 0 }
   validates :wattage_source, inclusion: { in: ["Label", "Measurement", "Guess"], message: "must be one of 'Label', 'Measurement' or 'Guess'" }
   validates :usage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 24 }
+  validates :tech_mod, inclusion: { in: ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional (12V)", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff", "No lamp"], message: "'%{value}' is not a valid tech-mod"}
+  validates :row, numericality: true
+  validates :mains_reflector, numericality: true
+  validates :power_multiplier, numericality: true
+  validates :power_add, numericality: true
+  validates :log_multiplier, numericality: true
+  validates :log_add, numericality: true
+  validates :power_adj, numericality: true
+  validates :efficacy, numericality: true
+  validates :lumens, numericality: true
+  validates :lumens_round, numericality: true
 
   private
 
