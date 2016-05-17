@@ -9,7 +9,7 @@ class Room < ActiveRecord::Base
   validates :number, numericality: { only_integer: true }
   validates :room_type, inclusion: { in: ["Bathroom", "Bedroom", "Dining", "Foyer-inside", "Hallway",
     "Kitchen (open plan)", "Kitchen (separate)", "Kitchen/Living", "Laundry", "Living-other", "Lounge",
-    "Media-room", "Other-inside", "Pantry", "Storage-Room", "Study", "Toilet", "Walk-in-Robe"], if: "indoors?", message: "%{value} is not a valid indoor room type" }
+    "Media-room", "Other-inside", "Pantry", "Stairwell", "Storage-Room", "Study", "Toilet", "Walk-in-Robe"], if: "indoors?", message: "%{value} is not a valid indoor room type" }
   validates :room_type, inclusion: { in: ["Garage", "Outside-general", "Outside-other", "Verandah"], if: "!indoors?", message: "%{value} is not a valid outdoor room type" }
   validates :area, numericality: { greater_than_or_equal_to: 1.0, if: "indoors?" }
   validates :height, numericality: { greater_than_or_equal_to: 0.0, if: "indoors?" }

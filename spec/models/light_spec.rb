@@ -6,8 +6,6 @@ RSpec.describe Light, type: :model do
   let(:switch) { create(:switch, house: house, room: room) }
   let(:light) { create(:light, house: house, room: room, switch: switch) }
 
-  before { light.valid? }
-
   describe "associations" do
     it "creates associations" do
       expect(light).to be_valid

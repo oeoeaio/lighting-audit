@@ -6,9 +6,9 @@ class Light < ActiveRecord::Base
   validates :house, :room, :switch, :name, :connection_type, :fitting, :colour, :technology, :shape, :wattage, :wattage_source, :usage, presence: true
   validates :tech_mod, :mains_reflector, :row, :power_multiplier, :power_add, :log_multiplier, :log_add, :power_adj, :efficacy, :lumens, :lumens_round, presence: true
   validates :connection_type, inclusion: { in: ["F", "P"], message: "'%{value}' is not a valid connection type (must be 'F' or 'P')" }
-  validates :fitting, inclusion: { in: ["Batton Holder", "Batton Holder with Shade", "Bedside Lamp", "Chandelier", "Desk Lamp", "Downlight/Flush Mounted", "Fan light", "Fixed Floor Light", "Floodlight/External Spotlight", "Floor/Standard Lamp", "Garden Light", "Heat Lamp", "Indoor Spotlight", "Linear batton/strip", "Nightlight", "Other", "Oyster", "Pool Light", "Rangehood", "Skylight-with-lamp", "Pendant", "Table Lamp", "Under bench", "Uplight", "Wall Light"], message: "'%{value}' is not a valid fitting type" }
+  validates :fitting, inclusion: { in: ["Batton Holder", "Batton Holder with Shade", "Bedside Lamp", "Chandelier", "Desk Lamp", "Downlight/Flush Mounted", "Fan Light", "Fixed Floor Light", "Floodlight/External Spotlight", "Floor/Standard Lamp", "Garden Light", "Heat Lamp Unit", "Indoor Spotlight", "Linear batton/strip", "Nightlight", "Other", "Oyster", "Pendant", "Pool Light", "Rangehood", "Skylight-with-lamp", "Pendant", "Table Lamp", "Under bench", "Uplight", "Wall Light"], message: "'%{value}' is not a valid fitting type" }
   validates :colour, inclusion: { in: ["C", "W"], message: "'%{value}' is not a valid lamp colour (must be 'C' or 'W')" }
-  validates :technology, inclusion: { in: ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff"], message: "'%{value}' is not a valid technology" }
+  validates :technology, inclusion: { in: ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff", "No lamp"], message: "'%{value}' is not a valid technology" }
   validate :shape_for_technology
   validate :cap_for_technology
   validate :transformer_for_technology
@@ -52,25 +52,25 @@ class Light < ActiveRecord::Base
     when "Incandescent (tungsten)"
       return {
         shape: ["A-shape frosted", "A-shape clear", "Fancy Round frosted", "Fancy Round clear", "Globe (sphere) frosted", "Globe (sphere) clear", "Candle frosted", "Candle clear", "Pilot", "Reflector - R", "Reflector - PAR", "Filament", "Other", "Cannot identify"],
-        cap: ["E14", "E27", "B15", "B22", "GU10", "Other", "Cannot identify"],
+        cap: ["E14", "E27", "B15", "B22", "GU10 (240V)", "Other", "Cannot identify"],
         transformer: ["N/A"]
       }
     when "Halogen - mains voltage"
       return {
         shape: ["A-shape frosted", "A-shape clear", "Fancy Round frosted", "Fancy Round clear", "Globe (sphere) frosted", "Globe (sphere) clear", "Candle frosted", "Candle clear", "Pilot", "Capsule", "Reflector - R", "Reflector - PAR", "Reflector - MR 50mm", "Double ended (lin halogen)", "Other", "Cannot identify"],
-        cap: ["E14", "E27", "B15", "B22", "GU10", "R7", "Other", "Cannot identify"],
+        cap: ["E14", "E27", "B15", "B22", "GU10 (240V)", "R7", "Other", "Cannot identify"],
         transformer: ["N/A"]
       }
     when "Halogen - low voltage"
       return {
         shape: ["Capsule", "Reflector - MR 30mm", "Reflector - MR 50mm", "Double ended (lin halogen)", "Other", "Cannot identify"],
-        cap: ["G4-5.3", "Cannot identify"],
+        cap: ["G4-5.3 (12V)", "Cannot identify"],
         transformer: ["Magnetic", "Electronic", "Cannot identify"]
       }
     when "CFL - integral ballast"
       return {
         shape: ["A-shape frosted", "Fancy Round frosted", "Globe (sphere) frosted", "Globe (sphere) clear", "Candle frosted", "Candle clear", "Reflector - R", "Reflector - PAR", "Reflector - MR 50mm", "CFL bare stick", "CFL bare spiral", "Other", "Cannot identify"],
-        cap: ["E14", "E27", "B15", "B22", "GU10", "Other", "Cannot identify"],
+        cap: ["E14", "E27", "B15", "B22", "GU10 (240V)", "Other", "Cannot identify"],
         transformer: ["N/A"]
       }
     when "CFL - separate ballast"
@@ -93,8 +93,8 @@ class Light < ActiveRecord::Base
       }
     when "LED directional"
       return {
-        shape: ["Reflector - R", "Reflector - PAR", "Reflector - MR 50mm", "Reflector - MR 30mm", "Integrated light", "Other", "Cannot indentify"],
-        cap: ["GU10", "G4-5.3", "Other", "No cap", "Cannot identify", "N/A"],
+        shape: ["Reflector - R", "Reflector - PAR", "Reflector - MR 50mm", "Reflector - MR 30mm", "Integrated light", "Other", "Cannot identify"],
+        cap: ["E14", "E27", "B15", "B22", "GU10 (240V)", "G4-5.3 (12V)", "Other", "No cap", "Cannot identify", "N/A"],
         transformer: ["Magnetic (12V)", "Electronic (12V)", "Cannot identify", "N/A (240V)"]
       }
     when "LED non-directional"
