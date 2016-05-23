@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'houses#new_multiple'
+  root 'home#index'
+
+  resources :home, only: :index
+
+  resources :exports, only: :index
 
   resources :houses, only: [] do
     collection do
