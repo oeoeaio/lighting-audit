@@ -35,7 +35,7 @@ class AuditSheetImporter
           when House
             @issues[original_filename] ||= {}
             @issues[original_filename][:house] ||= []
-            message = "Room #{e.record.name}: #{e.record.errors.full_messages.join(', ')}"
+            message = "House #{e.record.name}: #{e.record.errors.full_messages.join(', ')}"
             @issues[original_filename][:house] << message
           when Room
             @issues[original_filename] ||= {}
