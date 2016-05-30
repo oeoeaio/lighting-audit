@@ -1,3 +1,14 @@
-.row
-  .small-12.columns
-    %h3 All Houses
+= form_for :exports, as: :options, url: all_houses_exports_path, method: :put do |f|
+  .row
+    .small-12.columns
+      %h3 All Houses
+
+  .row
+    .small-4.columns
+      = f.label :room_type
+      = f.select :room_type, @room_types
+    .small-2.columns
+      %br
+      = f.submit "Download Now", class: 'button'
+    .small-6.columns
+      &nbsp;

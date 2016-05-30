@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   resources :home, only: :index
 
-  resources :exports, only: :index
+  resources :exports, only: :index do
+    put :all_houses, on: :collection
+  end
 
   resources :houses, only: [] do
     collection do

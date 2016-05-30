@@ -1,14 +1,20 @@
 class Light < ActiveRecord::Base
+  TECHNOLOGIES = ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff"]
+
   belongs_to :house
   belongs_to :room
   belongs_to :switch
+
+  scope :fixed, -> { where(connection_type: "F" ) }
+  scope :plug, -> { where(connection_type: "P" ) }
+  scope :dimmer, -> { where(dimmer: true ) }
 
   validates :house, :room, :switch, :name, :connection_type, :fitting, :colour, :technology, :shape, :wattage, :wattage_source, :usage, presence: true
   validates :tech_mod, :mains_reflector, :row, :power_multiplier, :power_add, :log_multiplier, :log_add, :power_adj, :efficacy, :lumens, :lumens_round, presence: true
   validates :connection_type, inclusion: { in: ["F", "P"], message: "'%{value}' is not a valid connection type (must be 'F' or 'P')" }
   validates :fitting, inclusion: { in: ["Batton Holder", "Batton Holder with Shade", "Bedside Lamp", "Chandelier", "Desk Lamp", "Downlight/Flush Mounted", "Fan Light", "Fixed Floor Light", "Floodlight/External Spotlight", "Floor/Standard Lamp", "Garden Light", "Heat Lamp Unit", "Indoor Spotlight", "Linear batton/strip", "Nightlight", "Other", "Oyster", "Pendant", "Pool Light", "Rangehood", "Skylight-with-lamp", "Pendant", "Table Lamp", "Under bench", "Uplight", "Wall Light"], message: "'%{value}' is not a valid fitting type" }
   validates :colour, inclusion: { in: ["C", "W"], message: "'%{value}' is not a valid lamp colour (must be 'C' or 'W')" }
-  validates :technology, inclusion: { in: ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff", "No lamp"], message: "'%{value}' is not a valid technology" }
+  validates :technology, inclusion: { in: TECHNOLOGIES, message: "'%{value}' is not a valid technology" }
   validate :shape_for_technology
   validate :cap_for_technology
   validate :transformer_for_technology
