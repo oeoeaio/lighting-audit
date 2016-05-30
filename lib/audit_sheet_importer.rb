@@ -110,7 +110,7 @@ class AuditSheetImporter
     lights = []
     light_attrs.each_with_index do |attrs, i|
       room = house.reload.rooms.find_by_number(attrs[:room].to_int)
-      next room.increment(:missing_light_count) if attrs[:technology] == "No lamp"
+      next room.increment!(:missing_light_count) if attrs[:technology] == "No lamp"
 
       ef_attrs = efficacy_attrs[i]
       attrs[:house] = house
