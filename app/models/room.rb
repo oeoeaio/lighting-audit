@@ -13,4 +13,7 @@ class Room < ActiveRecord::Base
   validates :room_type, inclusion: { in: ["Garage", "Outside-general", "Outside-other", "Verandah"], if: "!indoors?", message: "%{value} is not a valid outdoor room type" }
   validates :area, numericality: { greater_than_or_equal_to: 1.0, if: "indoors?" }
   validates :height, numericality: { greater_than_or_equal_to: 0.0, if: "indoors?" }
+
+  scope :indoor, -> { where(indoors: true) }
+  scope :outdoor, -> { where(indoors: false) }
 end

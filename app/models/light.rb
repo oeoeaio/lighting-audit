@@ -8,6 +8,8 @@ class Light < ActiveRecord::Base
   scope :fixed, -> { where(connection_type: "F" ) }
   scope :plug, -> { where(connection_type: "P" ) }
   scope :dimmer, -> { where(dimmer: true ) }
+  scope :indoor, -> { joins(:room).where(rooms: { indoors: true }) }
+  scope :outdoor, -> { joins(:room).where(rooms: { indoors: false }) }
 
   validates :house, :room, :switch, :name, :connection_type, :fitting, :colour, :technology, :shape, :wattage, :wattage_source, :usage, presence: true
   validates :tech_mod, :mains_reflector, :row, :power_multiplier, :power_add, :log_multiplier, :log_add, :power_adj, :efficacy, :lumens, :lumens_round, presence: true

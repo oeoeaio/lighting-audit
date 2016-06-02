@@ -13,13 +13,13 @@ class AllHousesExporter
         line = headline_for(house)
         line += by_tech_for(house, lambda { |lights| lights.count })
         line += [scoped_rooms_for(house).sum(:missing_light_count)]
-        line += by_tech_for(house, lambda { |lights| lights.sum(:wattage) })
+        line += by_tech_for(house, lambda { |lights| lights.sum(:power_adj) })
         line += by_tech_for(house, lambda { |lights| lights.sum(:lumens) })
         line += by_tech_for(house, lambda { |lights| lights.sum(:usage) } )
-        line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.wattage * l.usage }.sum } )
+        line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.power_adj * l.usage }.sum } )
         line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.efficacy * l.usage }.sum } )
         line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.lumens * l.usage }.sum } )
-        line += by_tech_for(house, lambda { |lights| lights.dimmer.count } )
+        line += by_tech_for(house, lambda { |lights| lights.dimmer.count }, 0 )
         line += dimmer_counts_by_tech_for(house)
         csv << line
       end
@@ -27,40 +27,54 @@ class AllHousesExporter
   end
 
   def headline_for(house)
-    floor_area = scoped_rooms_for(house).sum(:area)
-    room_count = scoped_rooms_for(house).count.to_f
+    total_floor_area = scoped_rooms_for(house).sum(:area)
+    indoor_floor_area = scoped_rooms_for(house).indoor.sum(:area)
+    total_room_count = scoped_rooms_for(house).count.to_f
+    indoor_room_count = scoped_rooms_for(house).indoor.count.to_f
     switch_count = scoped_switches_for(house).count.to_f
-    light_count = scoped_lights_for(house).count.to_f
-    total_watts = scoped_lights_for(house).sum(:wattage)
-    fixed_watts = scoped_lights_for(house).fixed.sum(:wattage)
-    plug_watts = scoped_lights_for(house).plug.sum(:wattage)
+    total_light_count = scoped_lights_for(house).count.to_f
+    indoor_light_count = scoped_lights_for(house).indoor.count.to_f
+    outdoor_light_count = scoped_lights_for(house).outdoor.count.to_f
+    total_watts = scoped_lights_for(house).sum(:power_adj)
+    fixed_watts = scoped_lights_for(house).fixed.sum(:power_adj)
+    plug_watts = scoped_lights_for(house).plug.sum(:power_adj)
+    indoor_total_watts = scoped_lights_for(house).indoor.sum(:power_adj)
+    indoor_fixed_watts = scoped_lights_for(house).indoor.fixed.sum(:power_adj)
+    indoor_plug_watts = scoped_lights_for(house).indoor.plug.sum(:power_adj)
     total_lumens = scoped_lights_for(house).sum(:lumens)
     fixed_lumens = scoped_lights_for(house).fixed.sum(:lumens)
     plug_lumens = scoped_lights_for(house).plug.sum(:lumens)
+    indoor_total_lumens = scoped_lights_for(house).indoor.sum(:lumens)
+    indoor_fixed_lumens = scoped_lights_for(house).indoor.fixed.sum(:lumens)
+    indoor_plug_lumens = scoped_lights_for(house).indoor.plug.sum(:lumens)
 
     line = []
     line << house.name
     line << house.house_type
-    line << floor_area
-    line << room_count
+    line << total_floor_area
+    line << indoor_floor_area
+    line << total_room_count
+    line << indoor_room_count
     line << switch_count
-    line << light_count
-    line << (light_count / floor_area).round(2)
-    line << (light_count / room_count).round(2)
+    line << total_light_count
+    line << indoor_light_count
+    line << outdoor_light_count
+    line << (indoor_light_count / indoor_floor_area).round(2)
+    line << (indoor_light_count / indoor_room_count).round(2)
     line << total_watts
     line << fixed_watts
     line << plug_watts
-    line << (total_watts / floor_area).round(2)
-    line << (fixed_watts / floor_area).round(2)
-    line << (plug_watts / floor_area).round(2)
+    line << (indoor_total_watts / indoor_floor_area).round(2)
+    line << (indoor_fixed_watts / indoor_floor_area).round(2)
+    line << (indoor_plug_watts / indoor_floor_area).round(2)
     line << total_lumens
     line << fixed_lumens
     line << plug_lumens
-    line << (total_lumens / floor_area).round(2)
-    line << (fixed_lumens / floor_area).round(2)
-    line << (plug_lumens / floor_area).round(2)
+    line << (indoor_total_lumens / indoor_floor_area).round(2)
+    line << (indoor_fixed_lumens / indoor_floor_area).round(2)
+    line << (indoor_plug_lumens / indoor_floor_area).round(2)
     line << scoped_lights_for(house).sum(:usage)
-    line << scoped_lights_for(house).map{ |l| l.wattage * l.usage }.sum
+    line << scoped_lights_for(house).map{ |l| l.power_adj * l.usage }.sum
     line << scoped_lights_for(house).map{ |l| l.efficacy * l.usage }.sum
     line << scoped_lights_for(house).map{ |l| l.lumens * l.usage }.sum
     line << scoped_lights_for(house).dimmer.count
@@ -69,10 +83,10 @@ class AllHousesExporter
 
   end
 
-  def by_tech_for(house, callback)
+  def by_tech_for(house, callback, val_if_empty="NULL")
     Light::TECHNOLOGIES.map do |technology|
       lights = scoped_lights_for(house).where(technology: technology)
-      next "NULL" if lights.empty?
+      next val_if_empty if lights.empty?
       callback.call(scoped_lights_for(house).where(technology: technology))
     end
   end
@@ -116,7 +130,10 @@ class AllHousesExporter
   end
 
   def header_line1
-    26.times.map { "" } +
+    ["", "", "Total", "Indoor", "Total", "Indoor", "Total", "Total",
+      "Indoor", "Outdoor", "Indoor", "Indoor", "Total", "Total", "Total",
+      "Indoor", "Indoor", "Indoor", "Total", "Total", "Total", "Indoor", "Indoor", "Indoor",
+      "", "", "", "", "", ""] +
     Light::TECHNOLOGIES +
     ["Missing"] +
     Light::TECHNOLOGIES +
@@ -131,9 +148,10 @@ class AllHousesExporter
   end
 
   def header_line2
-    ["House ID", "HH Type", "Floor Area", "No. Rooms", "No. Switches", "No. Lights", "Lights/sqm", "Lights/Room",
-    "Total Watts", "W Fixed", "W Plug", "W/sqm", "W/sqm Fixed", "W/sqm Plug", "Total Lumens", "L Fixed", "L Plug",
-    "L/sqm", "L/sqm Fixed", "L/sqm Plug", "h/day", "Wh/day", "eff h/day", "Lh/day", "No. Dim Lamps", "No. Dim Switches"] +
+    ["House ID", "HH Type", "Floor Area", "Floor Area", "Room Count", "Room Count", "Switch Count", "Lights Count",
+      "Lights Count", "Lights Count", "Lights/sqm", "Lights/Room", "Watts", "W Fixed", "W Plug",
+      "W/sqm", "W/sqm Fixed", "W/sqm Plug", "Lumens", "L Fixed", "L Plug", "L/sqm", "L/sqm Fixed", "L/sqm Plug",
+      "h/day", "Wh/day", "eff h/day", "Lh/day", "Dimmer Lamp Count", "Dimmer Switch Count"] +
     Light::TECHNOLOGIES.count.times.map { "Count" } +
     ["Count"] +
     Light::TECHNOLOGIES.count.times.map { "Watts" } +
@@ -142,8 +160,8 @@ class AllHousesExporter
     Light::TECHNOLOGIES.count.times.map { "Wh/day" } +
     Light::TECHNOLOGIES.count.times.map { "eff h/day" } +
     Light::TECHNOLOGIES.count.times.map { "Lh/day" } +
-    Light::TECHNOLOGIES.count.times.map { "Dimmer Lamps" } +
-    Light::TECHNOLOGIES.count.times.map { "Dimmer Switches" } +
-    ["DimmerSwitches"]
+    Light::TECHNOLOGIES.count.times.map { "Dimmer Lamp Count" } +
+    Light::TECHNOLOGIES.count.times.map { "Dimmer Switch Count" } +
+    ["Dimmer Switch Count"]
   end
 end
