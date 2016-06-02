@@ -9,7 +9,7 @@ FactoryGirl.define do
     colour "C"
     technology "LED directional"
     shape "Reflector - R"
-    cap "GU10"
+    cap "GU10 (240V)"
     transformer "N/A (240V)"
     wattage "5"
     wattage_source "Label"

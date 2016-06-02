@@ -20,7 +20,7 @@ RSpec.describe Light, type: :model do
 
   describe "validation" do
     let(:light_invalid1) { Light.create(house: nil, room: nil, switch: nil, name: nil, connection_type: nil, fitting: nil, colour: nil, technology: nil, shape: nil, wattage: nil, wattage_source: nil, usage: nil) }
-    let(:light_invalid2) { Light.create(house: house, room: room, switch: switch, name: "L3", connection_type: "W", fitting: "Batton Haha", colour: "P", technology: "LED directional", shape: "A-shape frosted", cap: "E14", transformer: "N/A", wattage: "0", wattage_source: "Labal", usage: "25") }
+    let(:light_invalid2) { Light.create(house: house, room: room, switch: switch, name: "L3", connection_type: "W", fitting: "Batton Haha", colour: "P", technology: "LED directional", shape: "A-shape frosted", cap: "R7", transformer: "N/A", wattage: "0", wattage_source: "Labal", usage: "25") }
 
     it "requires a connection_type to be either 'P' or 'F'" do
       expect(light_invalid1.errors[:connection_type]).to eq ["can't be blank", "'' is not a valid connection type (must be 'F' or 'P')"]
@@ -49,7 +49,7 @@ RSpec.describe Light, type: :model do
 
     it "requires a valid cap for a given technology type" do
       expect(light_invalid1.errors[:cap]).to eq []
-      expect(light_invalid2.errors[:cap]).to eq ["'E14' is not a valid cap when light technology is 'LED directional'"]
+      expect(light_invalid2.errors[:cap]).to eq ["'R7' is not a valid cap when light technology is 'LED directional'"]
     end
 
     it "requires a valid transformer for a given technology type" do
