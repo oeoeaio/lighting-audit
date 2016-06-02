@@ -1,4 +1,5 @@
 require 'all_houses_exporter'
+require 'cap_count_exporter'
 
 class ExportsController < ApplicationController
 
@@ -8,9 +9,15 @@ class ExportsController < ApplicationController
   end
 
   def all_houses
-    room_type = params[:room_type] | "all"
+    room_type = params[:room_type] || "all"
     exporter = AllHousesExporter.new(room_type: params[:exports][:room_type])
     exporter.go!
     send_data exporter.csv, type: 'text/csv', filename: "#{params[:exports][:room_type]}.csv"
+  end
+
+  def cap_count
+    exporter = CapCountExporter.new
+    exporter.go!
+    send_data exporter.csv, type: 'text/csv', filename: "cap_counts_by_tech.csv"
   end
 end

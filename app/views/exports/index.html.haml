@@ -1,13 +1,25 @@
-= form_for :exports, as: :options, url: all_houses_exports_path, method: :put do |f|
+= form_for :exports, url: all_houses_exports_path, method: :put do |f|
   .row
     .small-12.columns
       %h3 All Houses
 
-  .row
+  .row.margin-bottom-30
     .small-4.columns
       = f.label :room_type
       = f.select :room_type, @room_types
     .small-2.columns
+      %br
+      = f.submit "Download Now", class: 'button'
+    .small-6.columns
+      &nbsp;
+
+= form_for :exports, url: cap_count_exports_path, method: :put do |f|
+  .row
+    .small-12.columns
+      %h3 Cap Count By Tech
+
+  .row
+    .small-6.columns
       %br
       = f.submit "Download Now", class: 'button'
     .small-6.columns
