@@ -21,6 +21,8 @@ class AllHousesExporter
         line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.lumens * l.usage }.sum } )
         line += by_tech_for(house, lambda { |lights| lights.dimmer.count }, 0 )
         line += dimmer_counts_by_tech_for(house)
+        line += switch_counts_by_tech_for(house)
+        line += headline2_for(house)
         csv << line
       end
     end
@@ -80,7 +82,13 @@ class AllHousesExporter
     line << scoped_lights_for(house).dimmer.count
     line << scoped_lights_for(house).dimmer.map(&:switch).uniq.count
     line
+  end
 
+  def headline2_for(house)
+    line = []
+    line << scoped_lights_for(house).motion.count
+    line << scoped_lights_for(house).motion.map(&:switch).uniq.count
+    line
   end
 
   def by_tech_for(house, callback, val_if_empty="NULL")
@@ -105,6 +113,22 @@ class AllHousesExporter
     end
 
     dimmer_counts_by_tech.values
+  end
+
+  def switch_counts_by_tech_for(house)
+    switch_counts_by_tech = Light::TECHNOLOGIES.each_with_object({}) { |tech, switch_counts| switch_counts[tech] = 0 }
+    switch_counts_by_tech["Mixed"] = 0
+
+    scoped_switches_for(house).each do |switch|
+      light_grouping = switch.lights.group(:technology).count
+      if light_grouping.keys.count == 1
+        switch_counts_by_tech[light_grouping.keys.first] += 1
+      elsif light_grouping.keys.count > 1
+        switch_counts_by_tech["Mixed"] += 1
+      end
+    end
+
+    switch_counts_by_tech.values
   end
 
   def scoped_lights_for(house)
@@ -144,7 +168,10 @@ class AllHousesExporter
     Light::TECHNOLOGIES +
     Light::TECHNOLOGIES +
     Light::TECHNOLOGIES +
-    ["Mixed"]
+    ["Mixed"] +
+    Light::TECHNOLOGIES +
+    ["Mixed"] +
+    ["Total", "Total"]
   end
 
   def header_line2
@@ -152,7 +179,7 @@ class AllHousesExporter
       "Lights Count", "Lights Count", "Lights/sqm", "Lights/Room", "Watts", "W Fixed", "W Plug",
       "W/sqm", "W/sqm Fixed", "W/sqm Plug", "Lumens", "L Fixed", "L Plug", "L/sqm", "L/sqm Fixed", "L/sqm Plug",
       "h/day", "Wh/day", "eff h/day", "Lh/day", "Dimmer Lamp Count", "Dimmer Switch Count"] +
-    Light::TECHNOLOGIES.count.times.map { "Count" } +
+    Light::TECHNOLOGIES.count.times.map { "Lamp Count" } +
     ["Count"] +
     Light::TECHNOLOGIES.count.times.map { "Watts" } +
     Light::TECHNOLOGIES.count.times.map { "Lumens" } +
@@ -162,6 +189,9 @@ class AllHousesExporter
     Light::TECHNOLOGIES.count.times.map { "Lh/day" } +
     Light::TECHNOLOGIES.count.times.map { "Dimmer Lamp Count" } +
     Light::TECHNOLOGIES.count.times.map { "Dimmer Switch Count" } +
-    ["Dimmer Switch Count"]
+    ["Dimmer Switch Count"] +
+    Light::TECHNOLOGIES.count.times.map { "Switch Count" } +
+    ["Switch Count"] +
+    ["Motion Lamp Count", "Motion Switch Count"]
   end
 end

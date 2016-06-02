@@ -8,6 +8,7 @@ class Light < ActiveRecord::Base
   scope :fixed, -> { where(connection_type: "F" ) }
   scope :plug, -> { where(connection_type: "P" ) }
   scope :dimmer, -> { where(dimmer: true ) }
+  scope :motion, -> { where(motion: true ) }
   scope :indoor, -> { joins(:room).where(rooms: { indoors: true }) }
   scope :outdoor, -> { joins(:room).where(rooms: { indoors: false }) }
 
