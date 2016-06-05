@@ -1,5 +1,5 @@
 class Light < ActiveRecord::Base
-  TECHNOLOGIES = ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff"]
+  TECHNOLOGIES = ["Incandescent (tungsten)", "Halogen - mains voltage", "Halogen - low voltage", "CFL - integral ballast", "CFL - separate ballast", "Linear fluorescent", "Circular fluorescent", "LED directional", "LED directional (12V)", "LED non-directional", "Heat Lamp", "Other", "Cannot identify low eff", "Cannot identify high eff"]
 
   belongs_to :house
   belongs_to :room
