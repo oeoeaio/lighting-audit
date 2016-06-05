@@ -11,7 +11,7 @@ class AllHousesExporter
       csv << header_line2
       House.order(name: :asc).each do |house|
         line = headline_for(house)
-        line += by_tech_for(house, lambda { |lights| lights.count })
+        line += by_tech_for(house, lambda { |lights| lights.count }, 0)
         line += [scoped_rooms_for(house).sum(:missing_light_count)]
         line += by_tech_for(house, lambda { |lights| lights.sum(:power_adj) })
         line += by_tech_for(house, lambda { |lights| lights.sum(:lumens) })
@@ -23,6 +23,8 @@ class AllHousesExporter
         line += dimmer_counts_by_tech_for(house)
         line += switch_counts_by_tech_for(house)
         line += headline2_for(house)
+        line += by_tech_for(house, lambda { |lights| lights.fixed.count }, 0 )
+        line += by_tech_for(house, lambda { |lights| lights.plug.count }, 0 )
         csv << line
       end
     end
@@ -88,6 +90,8 @@ class AllHousesExporter
     line = []
     line << scoped_lights_for(house).motion.count
     line << scoped_lights_for(house).motion.map(&:switch).uniq.count
+    line << scoped_lights_for(house).fixed.count.to_f
+    line << scoped_lights_for(house).plug.count.to_f
     line
   end
 
@@ -171,7 +175,9 @@ class AllHousesExporter
     ["Mixed"] +
     Light::TECHNOLOGIES +
     ["Mixed"] +
-    ["Total", "Total"]
+    ["Total", "Total", "Total", "Total"] +
+    Light::TECHNOLOGIES +
+    Light::TECHNOLOGIES
   end
 
   def header_line2
@@ -192,6 +198,9 @@ class AllHousesExporter
     ["Dimmer Switch Count"] +
     Light::TECHNOLOGIES.count.times.map { "Switch Count" } +
     ["Switch Count"] +
-    ["Motion Lamp Count", "Motion Switch Count"]
+    ["Motion Lamp Count", "Motion Switch Count"] +
+    ["Fixed Count", "Plug Count"] +
+    Light::TECHNOLOGIES.count.times.map { "Fixed Count" } +
+    Light::TECHNOLOGIES.count.times.map { "Plug Count" }
   end
 end
