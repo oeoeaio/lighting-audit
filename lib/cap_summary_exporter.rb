@@ -3,7 +3,7 @@ class CapSummaryExporter
 
   def go!
     @csv = CSV.generate do |csv|
-      caps = Light.group(:cap).count.keys
+      caps = Light.group(:cap).count.keys.sort
       csv << [""] + caps.count.times.map{ "Count" } + caps.count.times.map{ "Watts" } + caps.count.times.map{ "Lumens" }
       csv << ["Tech"] + caps + caps + caps
       Light::TECHNOLOGIES.each do |tech|

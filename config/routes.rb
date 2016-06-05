@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :exports, only: :index do
     put :all_houses, on: :collection
     put :cap_summary, on: :collection
+    put :fitting_summary, on: :collection
   end
 
   resources :houses, only: [] do

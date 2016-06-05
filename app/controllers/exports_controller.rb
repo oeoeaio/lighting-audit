@@ -1,5 +1,6 @@
 require 'all_houses_exporter'
 require 'cap_summary_exporter'
+require 'fitting_summary_exporter'
 
 class ExportsController < ApplicationController
 
@@ -19,5 +20,11 @@ class ExportsController < ApplicationController
     exporter = CapSummaryExporter.new
     exporter.go!
     send_data exporter.csv, type: 'text/csv', filename: "cap_summary_by_tech.csv"
+  end
+
+  def fitting_summary
+    exporter = FittingSummaryExporter.new
+    exporter.go!
+    send_data exporter.csv, type: 'text/csv', filename: "fitting_summary_by_tech.csv"
   end
 end
