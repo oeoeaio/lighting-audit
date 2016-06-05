@@ -97,9 +97,9 @@ class AllHousesExporter
 
   def by_tech_for(house, callback, val_if_empty="NULL")
     Light::TECHNOLOGIES.map do |technology|
-      lights = scoped_lights_for(house).where(technology: technology)
+      lights = scoped_lights_for(house).where(tech_mod: technology)
       next val_if_empty if lights.empty?
-      callback.call(scoped_lights_for(house).where(technology: technology))
+      callback.call(scoped_lights_for(house).where(tech_mod: technology))
     end
   end
 
@@ -108,7 +108,7 @@ class AllHousesExporter
     dimmer_counts_by_tech["Mixed"] = 0
 
     scoped_switches_for(house).each do |switch|
-      light_grouping = switch.lights.dimmer.group(:technology).count
+      light_grouping = switch.lights.dimmer.group(:tech_mod).count
       if light_grouping.keys.count == 1
         dimmer_counts_by_tech[light_grouping.keys.first] += 1
       elsif light_grouping.keys.count > 1
@@ -124,7 +124,7 @@ class AllHousesExporter
     switch_counts_by_tech["Mixed"] = 0
 
     scoped_switches_for(house).each do |switch|
-      light_grouping = switch.lights.group(:technology).count
+      light_grouping = switch.lights.group(:tech_mod).count
       if light_grouping.keys.count == 1
         switch_counts_by_tech[light_grouping.keys.first] += 1
       elsif light_grouping.keys.count > 1
