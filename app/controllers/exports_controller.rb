@@ -1,6 +1,6 @@
 require 'all_houses_exporter'
-require 'cap_summary_exporter'
-require 'fitting_summary_exporter'
+require 'cap_summary_by_tech_exporter'
+require 'cap_summary_by_fitting_exporter'
 
 class ExportsController < ApplicationController
 
@@ -16,15 +16,15 @@ class ExportsController < ApplicationController
     send_data exporter.csv, type: 'text/csv', filename: "#{params[:exports][:room_type]}.csv"
   end
 
-  def cap_summary
-    exporter = CapSummaryExporter.new
+  def cap_summary_by_tech
+    exporter = CapSummaryByTechExporter.new
     exporter.go!
     send_data exporter.csv, type: 'text/csv', filename: "cap_summary_by_tech.csv"
   end
 
-  def fitting_summary
-    exporter = FittingSummaryExporter.new
+  def cap_summary_by_fitting
+    exporter = CapSummaryByFittingExporter.new
     exporter.go!
-    send_data exporter.csv, type: 'text/csv', filename: "fitting_summary_by_tech.csv"
+    send_data exporter.csv, type: 'text/csv', filename: "cap_summary_by_fitting.csv"
   end
 end

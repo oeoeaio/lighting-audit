@@ -151,7 +151,7 @@ class AllHousesExporter
     {
       "all" => ["Bathroom", "Bedroom", "Dining", "Foyer-inside", "Hallway", "Kitchen (open plan)", "Kitchen (separate)", "Kitchen/Living", "Laundry", "Living-other", "Lounge", "Media-room", "Other-inside", "Pantry", "Stairwell", "Storage-Room", "Study", "Toilet", "Walk-in-Robe", "Garage", "Outside-general", "Outside-other", "Verandah"],
       "living" => ["Dining", "Kitchen (open plan)", "Kitchen (separate)", "Kitchen/Living", "Living-other", "Lounge", "Media-room", "Pantry"],
-      "sleeping" => ["Bathroom", "Study"],
+      "sleeping" => ["Bedroom", "Study"],
       "indoor-other" => ["Bathroom", "Foyer-inside", "Hallway", "Laundry", "Other-inside", "Stairwell", "Storage-Room", "Toilet", "Walk-in-Robe"],
       "outdoor" => ["Garage", "Outside-general", "Outside-other", "Verandah"]
     }

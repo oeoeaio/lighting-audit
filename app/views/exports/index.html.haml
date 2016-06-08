@@ -13,10 +13,10 @@
     .small-6.columns
       &nbsp;
 
-= form_for :exports, url: cap_summary_exports_path, method: :put do |f|
+= form_for :exports, url: cap_summary_by_tech_exports_path, method: :put do |f|
   .row
     .small-12.columns
-      %h3 Cap Summary
+      %h3 Cap Summary By Technology
 
   .row
     .small-6.columns
@@ -25,10 +25,10 @@
     .small-6.columns
       &nbsp;
 
-= form_for :exports, url: fitting_summary_exports_path, method: :put do |f|
+= form_for :exports, url: cap_summary_by_fitting_exports_path, method: :put do |f|
   .row
     .small-12.columns
-      %h3 Fitting Summary
+      %h3 Cap Summary By Fitting
 
   .row
     .small-6.columns

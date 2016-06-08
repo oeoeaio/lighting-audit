@@ -1,4 +1,4 @@
-class CapSummaryExporter
+class CapSummaryByTechExporter
   attr_accessor :csv
 
   def go!
