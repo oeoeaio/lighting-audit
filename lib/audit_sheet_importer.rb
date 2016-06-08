@@ -110,12 +110,14 @@ class AuditSheetImporter
     lights = []
     light_attrs.each_with_index do |attrs, i|
       room = house.reload.rooms.find_by_number(attrs[:room].to_int)
+      switch = Switch.find_or_initialize_by(house: house, number: attrs[:switch].to_int)
+      switch.update_attribute(:room, room) unless switch.persisted? # for switches that have lamps in separate rooms
       next room.increment!(:missing_light_count) if attrs[:technology] == "No lamp"
 
       ef_attrs = efficacy_attrs[i]
       attrs[:house] = house
       attrs[:room] = room
-      attrs[:switch] = Switch.find_or_create_by(house: attrs[:house], room: attrs[:room], number: attrs[:switch].to_int)
+      attrs[:switch] = switch
       attrs[:connection_type] = attrs[:connection_type].upcase
       attrs[:dimmer] = attrs[:dimmer].in? truthy_values
       attrs[:motion] = attrs[:motion].in? truthy_values
