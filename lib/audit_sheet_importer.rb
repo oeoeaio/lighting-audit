@@ -1,4 +1,5 @@
 require 'roo'
+require 'efficacy_updater'
 
 class AuditSheetImporter
   attr_accessor :files, :issues
@@ -19,8 +20,10 @@ class AuditSheetImporter
         begin
           raise HouseExistsException.new("House already exists!") if House.find_by_audit_file(original_filename)
           house = create_house_for(house_file, original_filename)
-          rooms = create_rooms_for(house_file, house)
-          lights = create_lights_for(house_file, house)
+          create_rooms_for(house_file, house)
+          create_lights_for(house_file, house)
+          efficacy_updater = EfficacyUpdater.new
+          efficacy_updater.go!(house.lights)
         rescue HouseExistsException => hie
           @issues[original_filename] ||= {}
           @issues[original_filename][:house_exists] ||= []

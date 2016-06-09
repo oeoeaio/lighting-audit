@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160516103149) do
+ActiveRecord::Schema.define(version: 20160609010232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160516103149) do
     t.decimal  "efficacy",         precision: 10, scale: 6,                   null: false
     t.decimal  "lumens",           precision: 11, scale: 6,                   null: false
     t.integer  "lumens_round",                                                null: false
+    t.decimal  "overall_efficacy", precision: 10, scale: 6
   end
 
   add_index "lights", ["house_id"], name: "index_lights_on_house_id", using: :btree
