@@ -4,6 +4,11 @@ class HousesController < ApplicationController
   end
 
   def create_multiple
+    unless params[:houses] && params[:houses][:audit_files] && params[:houses][:audit_files].any?
+      flash[:error] = "Please select some files"
+      return render :new_multiple
+    end
+
     files = params[:houses][:audit_files]
     files.keep_if{ |f| f.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
     importer = AuditSheetImporter.new files: files
