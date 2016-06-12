@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609010232) do
+ActiveRecord::Schema.define(version: 20160611071954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,9 +45,9 @@ ActiveRecord::Schema.define(version: 20160609010232) do
     t.string   "shape",                                                       null: false
     t.string   "cap"
     t.string   "transformer"
-    t.decimal  "wattage",          precision: 5,  scale: 2,                   null: false
+    t.decimal  "wattage",          precision: 10, scale: 6,                   null: false
     t.string   "wattage_source",                            default: "label", null: false
-    t.decimal  "usage",            precision: 4,  scale: 1,                   null: false
+    t.decimal  "usage",            precision: 5,  scale: 3,                   null: false
     t.text     "notes"
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
