@@ -17,7 +17,7 @@ class AllHousesExporter
         line += by_tech_for(house, lambda { |lights| lights.sum(:lumens) })
         line += by_tech_for(house, lambda { |lights| lights.sum(:usage) } )
         line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.power_adj * l.usage }.sum } )
-        line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.efficacy * l.usage }.sum } )
+        line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.overall_efficacy * l.usage }.sum } )
         line += by_tech_for(house, lambda { |lights| lights.map{ |l| l.lumens * l.usage }.sum } )
         line += by_tech_for(house, lambda { |lights| lights.dimmer.count }, 0 )
         line += dimmer_counts_by_tech_for(house)
@@ -79,7 +79,7 @@ class AllHousesExporter
     line << (indoor_plug_lumens / indoor_floor_area).round(2)
     line << scoped_lights_for(house).sum(:usage)
     line << scoped_lights_for(house).map{ |l| l.power_adj * l.usage }.sum
-    line << scoped_lights_for(house).map{ |l| l.efficacy * l.usage }.sum
+    line << scoped_lights_for(house).map{ |l| l.overall_efficacy * l.usage }.sum
     line << scoped_lights_for(house).map{ |l| l.lumens * l.usage }.sum
     line << scoped_lights_for(house).dimmer.count
     line << scoped_lights_for(house).dimmer.map(&:switch).uniq.count
