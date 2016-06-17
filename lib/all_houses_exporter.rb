@@ -2,7 +2,7 @@ class AllHousesExporter
   attr_accessor :room_types, :csv
 
   def initialize(opts={})
-    @room_types = room_type_options[opts[:room_type]]
+    @room_types = Room::CATEGORIES[opts[:room_type]]
   end
 
   def go!
@@ -145,16 +145,6 @@ class AllHousesExporter
 
   def scoped_rooms_for(house)
     house.rooms.where(room_type: room_types)
-  end
-
-  def room_type_options
-    {
-      "all" => ["Bathroom", "Bedroom", "Dining", "Foyer-inside", "Hallway", "Kitchen (open plan)", "Kitchen (separate)", "Kitchen/Living", "Laundry", "Living-other", "Lounge", "Media-room", "Other-inside", "Pantry", "Stairwell", "Storage-Room", "Study", "Toilet", "Walk-in-Robe", "Garage", "Outside-general", "Outside-other", "Verandah"],
-      "living" => ["Dining", "Kitchen (open plan)", "Kitchen (separate)", "Kitchen/Living", "Living-other", "Lounge", "Media-room", "Pantry"],
-      "sleeping" => ["Bedroom", "Study"],
-      "indoor-other" => ["Bathroom", "Foyer-inside", "Hallway", "Laundry", "Other-inside", "Stairwell", "Storage-Room", "Toilet", "Walk-in-Robe"],
-      "outdoor" => ["Garage", "Outside-general", "Outside-other", "Verandah"]
-    }
   end
 
   def header_line1

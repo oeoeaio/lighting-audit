@@ -12,11 +12,11 @@ class AllLightsExporter
   private
 
   def headers
-    ["House","Room","Switch"] + light_attrs.map(&:humanize) + ["Notes"]
+    ["House","Room","Room Type","Room Category","Switch"] + light_attrs.map(&:humanize) + ["Notes"]
   end
 
   def select_string
-    list = ["houses.name as house_name","rooms.number as room_number","switches.number as switch_number"]
+    list = ["houses.name as house_name","rooms.number as room_number","rooms.room_type as room_type","switches.number as switch_number"]
     light_attrs.each do |attr|
       list << "lights.#{attr}"
     end
@@ -26,7 +26,7 @@ class AllLightsExporter
 
   def report_attrs
     return @report_attrs unless @report_attrs.nil?
-    list = ["house_name","room_number","switch_number"]
+    list = ["house_name","room_number","room_type","room_category","switch_number"]
     light_attrs.each_with_object(list) do |attr, list|
       list << attr
     end
@@ -41,19 +41,17 @@ class AllLightsExporter
 
   def line_for(light)
     report_attrs.each_with_object([]) do |attr, line|
-      line << light[attr]
+      if attr == "room_category"
+        line << room_category_for(light["room_type"])
+      else
+        line << light[attr]
+      end
     end
   end
-    # line = []
-    # line << light.house.name
-    # line << light.room.number
-    # line << light.switch.number
-    # line << name: string
-    # line << connection_type.to_s
-    # line << dimmer? ? "Yes" : "No"
-    # line << motion: boolean, fitting: string, colour: string, technology: string, shape: string, cap: string, transformer: string, wattage: decimal, wattage_source: string, usage: decimal, notes: text, created_at: datetime, updated_at: datetime, tech_mod: string, mains_reflector: decimal, row: integer, power_multiplier: decimal, power_add: integer, log_multiplier: decimal, log_add: decimal, power_adj: decimal, efficacy: decimal, lumens: decimal, lumens_round: integer, overall_efficacy: decimal
-    # light_attrs.each do |attr|
-    #   line << light[attr]
-    # end
-    # line
+
+  def room_category_for(room_type)
+    Room::CATEGORIES.except("all").each do |room_category,room_types|
+      return room_category.humanize if room_types.include? room_type
+    end
+  end
 end
