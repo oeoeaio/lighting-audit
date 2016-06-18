@@ -4,7 +4,7 @@ class AllLightsExporter
   def go!
     @csv = CSV.generate do |csv|
       csv << headers
-      lights = Light.joins(:house, :room, :switch).order('houses.name ASC, rooms.number ASC, switches.number ASC').select(select_string)
+      lights = Light.joins(:house, :room, :switch).order('houses.name ASC, rooms.number ASC, switches.number ASC, lights.name ASC').select(select_string)
       lights.each { |light| csv << line_for(light) }
     end
   end
