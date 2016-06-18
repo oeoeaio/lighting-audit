@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :exports, only: :index do
     put :all_houses, on: :collection
+    put :all_rooms, on: :collection
     put :all_lights, on: :collection
     put :cap_summary_by_tech, on: :collection
     put :cap_summary_by_fitting, on: :collection

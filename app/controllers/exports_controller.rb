@@ -1,4 +1,5 @@
 require 'all_houses_exporter'
+require 'all_rooms_exporter'
 require 'all_lights_exporter'
 require 'cap_summary_by_tech_exporter'
 require 'cap_summary_by_fitting_exporter'
@@ -15,6 +16,12 @@ class ExportsController < ApplicationController
     exporter = AllHousesExporter.new(room_type: params[:exports][:room_type])
     exporter.go!
     send_data exporter.csv, type: 'text/csv', filename: "#{params[:exports][:room_type]}.csv"
+  end
+
+  def all_rooms
+    exporter = AllRoomsExporter.new
+    exporter.go!
+    send_data exporter.csv, type: 'text/csv', filename: "all_rooms.csv"
   end
 
   def all_lights
