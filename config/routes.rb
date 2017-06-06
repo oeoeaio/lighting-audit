@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     put :all_lights, on: :collection
     put :cap_summary_by_tech, on: :collection
     put :cap_summary_by_fitting, on: :collection
+    put :fitting_summary_by_tech, on: :collection
   end
 
   resources :houses, only: [] do

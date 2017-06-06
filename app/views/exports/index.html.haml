@@ -60,3 +60,15 @@
       = f.submit "Download Now", class: 'button'
     .small-6.columns
       &nbsp;
+
+= form_for :exports, url: fitting_summary_by_tech_exports_path, method: :put do |f|
+  .row
+    .small-12.columns
+      %h3 Fitting Summary By Technology
+
+  .row
+    .small-6.columns
+      %br
+      = f.submit "Download Now", class: 'button'
+    .small-6.columns
+      &nbsp;

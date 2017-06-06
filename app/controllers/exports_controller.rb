@@ -3,6 +3,7 @@ require 'all_rooms_exporter'
 require 'all_lights_exporter'
 require 'cap_summary_by_tech_exporter'
 require 'cap_summary_by_fitting_exporter'
+require 'fitting_summary_by_tech_exporter'
 
 class ExportsController < ApplicationController
 
@@ -40,5 +41,11 @@ class ExportsController < ApplicationController
     exporter = CapSummaryByFittingExporter.new
     exporter.go!
     send_data exporter.csv, type: 'text/csv', filename: "cap_summary_by_fitting.csv"
+  end
+
+  def fitting_summary_by_tech
+    exporter = FittingSummaryByTechExporter.new
+    exporter.go!
+    send_data exporter.csv, type: 'text/csv', filename: "fitting_summary_by_tech.csv"
   end
 end
